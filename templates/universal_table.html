@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block nombre_titulo %}
+Asistente de normalización
+{% endblock %}
+
+{% block contenido %}
+<!--dataframe, attributes, document-->
+<div class="table-responsive-sm">
+    {{dataframe | safe}}
+</div>
+<br>
+<div class="container">
+    <div class="abs-center">
+        <div class="form-group">
+            <h3>Seleccione los atributos que forman parte de la Clave primaria</h3>
+            <form action="/1_nf" , method="POST">
+                <input type="hidden" value='{{attributes}}' name="attributes">
+                <input type="hidden" value='{{dataframe}}' name="original_table">
+                <input type="hidden" value='{{document}}' name="document">
+                {% for attribute in attributes %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="id_{{attribute}}" name="attribute"
+                           value="{{attribute}}">
+                    <label class="custom-control-label" for="id_{{attribute}}">{{attribute}}</label>
+                </div>
+                {% endfor %}
+                <br>
+                <input class="btn btn-primary" type="submit" value="EMPEZAR">
+                <br>
+            </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                <h3>{{ message }}</h3>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

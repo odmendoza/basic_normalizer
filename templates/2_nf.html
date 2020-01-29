@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block nombre_titulo %}
+Primera forma normal
+{% endblock %}
+
+{% block contenido %}
+​<!--primary_key, tables, data-->
+<br>
+<h2 align="center">PRIMERA FORMA NORMAL</h2>
+<br>
+<h4>Su Clave primaria es {{primary_key}}</h4>
+<br>
+<div class="table-responsive-sm">
+    {%for table in tables%}
+    <br>
+    {{ table | safe }}
+    <br>
+    {% endfor %}
+</div>
+<div class="container">
+    <div class="abs-center">
+        <div class="form-group">
+            <br>
+            <h3>¿Existen atributos no clave que dependan de forma funcional y parcial de la Clave Primaria?</h3>
+            <br>
+            <form action="/3_nf" method="POST">
+                <input type="hidden" value="{{primary_key}}" name="primary_key">
+                <input type="hidden" value="{{not_key}}" name="not_key">
+                <input type="hidden" value="{{tables}}" name="tables">
+                <input type="hidden" value="{{attributes_not_key}}" name="attributes_not_key">
+                <select name="comp_select" class="selectpicker form-control" id="selector">
+                    {% for o in data %}
+                    <option value="{{ o.name }}">{{ o.name }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <h3>Seleccione la clave primaria parcial de la que dependen los aributos</h3>
+                <br>
+                {% for pk in primary_key %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="id_{{pk}}" name="pk" value="{{pk}}">
+                    <label class="custom-control-label" for="id_{{pk}}">{{pk}}</label>
+                </div>
+                {%endfor %}
+                <br>
+                <h3>Seleccione los atributos que dependen funcionalmente de la Clave primaria parcial</h3>
+                <br>
+                {% for ank in attributes_not_key %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="id_{{ank}}" name="ank" value="{{ank}}">
+                    <label class="custom-control-label" for="id_{{ank}}">{{ank}}</label>
+                </div>
+                {%endfor %}
+                <br>
+                <input class="btn btn-primary" type="submit" value=" CONTINUAR ">
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

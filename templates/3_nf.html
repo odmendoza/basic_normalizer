@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block nombre_titulo %}
+    Segunda forma normal
+{% endblock %}
+
+{% block contenido %}
+<br>
+<h2 align="center">SEGUNDA FORMA NORMAL</h2>
+<br>
+<h4>Su Clave primaria es {{ p_k }}</h4>
+<br>
+<div class="table-responsive-sm">
+    {%for table in tables%}
+    <br>
+    {{ table | safe }}
+    <br>
+    {% endfor %}
+</div>
+<div class="container">
+    <div class="abs-center">
+        <div class="form-group">
+            <br>
+            <h3>¿Existen atributos no clave que dependan funcionalmente de otros atributos no clave?</h3>
+            <br>
+            <form action="/normalized" method="POST">
+                <input type="hidden" value="{{p_k}}" name="primary_key">
+                <input type="hidden" value="{{not_key}}" name="not_key">
+                <input type="hidden" value="{{tables}}" name="tables">
+                <input type="hidden" value="{{attributes_not_key}}" name="attributes_not_key">
+                <select name="comp_select" class="selectpicker form-control" id="selector">
+                    {% for o in data %}
+                    <option value="{{ o.name }}">{{ o.name }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <h3>Seleccione los atributos determinantes</h3>
+                <br>
+                {% for nk in n_k %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="id_{{nk}}" name="nk" value="{{nk}}">
+                    <label class="custom-control-label" for="id_{{nk}}">{{nk}}</label>
+                </div>
+                {%endfor %}
+                <br>
+                <h3>Seleccione los atributos que tienen dependencia funcional transitiva</h3>
+                <br>
+                {% for dnk in n_k %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{dnk}}" name="dnk" value="{{dnk}}">
+                    <label class="custom-control-label" for="{{dnk}}">{{dnk}}</label>
+                </div>
+                {%endfor %}
+                <br>
+                <input class="btn btn-primary" type="submit" value=" CONTINUAR ">
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

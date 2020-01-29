@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block nombre_titulo %}
+    Tercera forma normal
+{% endblock %}
+
+{% block contenido %}
+<br>
+<h2 align="center"> TABLAS NORMALIZADAS </h2>
+<br>
+<h4>Su Clave primaria es {{ p_k }}</h4>
+<br>
+<div class="table-responsive-sm">
+    {%for table in tables%}
+    <br>
+    {{ table | safe }}
+    <br>
+    {% endfor %}
+</div>
+{% endblock %}

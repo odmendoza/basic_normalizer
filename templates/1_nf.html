@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block nombre_titulo %}
+Asistente de normalización
+{% endblock %}
+
+{% block contenido %}
+<!--primary_key, table, attributes, not_key-->
+<br>
+<h4>Su Clave primaria es {{ primary_key }}</h4>
+<br>
+<div class="table-responsive-sm">
+    {{ table | safe }}
+</div>
+<br>
+<div class="container">
+    <div class="abs-center">
+        <div class="form-group">
+            <h3>Seleccione los atruibutos no clave que contienen datos no atómicos</h3>
+            <form action="/2_nf" method="POST">
+                <input type="hidden" value="{{primary_key}}" name="primary_key">
+                <input type="hidden" value="{{not_key}}" name="not_key">
+                <input type="hidden" value="{{table}}" name="table">
+                <input type="hidden" value="{{attributes}}" name="attributes">
+                {% for nk in not_key %}
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="id_{{nk}}" name="attribute" value="{{nk}}">
+                    <label class="custom-control-label" for="id_{{nk}}">{{nk}}</label>
+                </div>
+                {%endfor %}
+                <br>
+                <h3>Seleccione el separador de los datos no atómicos</h3>
+                <br>
+                <select name="comp_select" class="selectpicker form-control" id="selector">
+                    {% for o in data %}
+                    <option value="{{ o.name }}">{{ o.name }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <br>
+                <input class="btn btn-primary" type="submit" value="PRIMERA FORMA NORMAL">
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

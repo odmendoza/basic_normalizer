@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block nombre_titulo %}
+
+Asistente de normalización
+
+{% endblock %}
+
+{% block contenido %}
+<div class='container'>
+    <div class="abs-center">
+        <div class="form-group">
+            <form method=post enctype=multipart/form-data>
+                <br>
+                <input type=file name=file>
+                <input type=submit value=Subir class="btn btn-primary mb-2">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
