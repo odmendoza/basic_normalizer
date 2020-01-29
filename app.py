@@ -1,3 +1,6 @@
+#!/usr/bin/python3.5.2
+#!python
+# -*- coding: utf-8 -*-
 import os
 import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, flash
