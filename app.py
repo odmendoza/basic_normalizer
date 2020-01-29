@@ -9,6 +9,7 @@ ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
 
 # Settings
 app = Flask(__name__)
+heroku = Heroku(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = '!my_secret*key?'
 
@@ -333,4 +334,4 @@ def normalized():
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(port=5000, debug=True)
+    app.run()
