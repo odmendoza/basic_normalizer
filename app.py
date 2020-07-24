@@ -5,7 +5,6 @@ import os
 import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-from itertools import permutations
 from flask_heroku import Heroku
 
 UPLOAD_FOLDER = 'files/'
@@ -13,9 +12,8 @@ ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
 
 # Settings
 app = Flask(__name__)
-heroku = Heroku(app)
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = '!my_secret*key?'
 
 
 def allowed_file(filename):
@@ -336,6 +334,6 @@ def normalized():
 
 
 if __name__ == '__main__':
-    # app.jinja_env.auto_reload = True
-    # app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.run()
