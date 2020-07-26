@@ -57,7 +57,7 @@ def universal_table(filename):
     table_attributes = table.columns.values
 
     dataframe = pd.DataFrame.to_html(table, index=False)
-    dataframe = dataframe.replace('class="dataframe"', 'class="table"')
+    dataframe = dataframe.replace('class="dataframe"', 'class="table table-sm"')
 
     print(dataframe)
     return render_template('universal_table.html', dataframe=dataframe, attributes=table_attributes, document=filename)
@@ -156,7 +156,7 @@ def second_nf():
         print(type(not_atomic))
 
         table = request.form.get('table')
-        table = table.replace('class="table"', 'class="dataframe"')
+        table = table.replace('class="table table-sm"', 'class="dataframe"')
         print(table)
         data = pd.read_html(table, header=0)[0]
         data = pd.DataFrame(data)
@@ -167,7 +167,7 @@ def second_nf():
         table_without_not_atomic = data
         table_without_not_atomic = table_without_not_atomic.drop(columns=not_atomic)
         table_without_not_atomic = pd.DataFrame.to_html(table_without_not_atomic, index=False)
-        table_without_not_atomic = table_without_not_atomic.replace('class="dataframe"', 'class="table"')
+        table_without_not_atomic = table_without_not_atomic.replace('class="dataframe"', 'class="table table-sm"')
         tables.append(table_without_not_atomic)
         print(table_without_not_atomic)
 
@@ -197,7 +197,7 @@ def second_nf():
                 j = j + 1
             print(table_1nf)
             table_1nf = pd.DataFrame.to_html(table_1nf, index=False)
-            table_1nf = table_1nf.replace('class="dataframe"', 'class="table"')
+            table_1nf = table_1nf.replace('class="dataframe"', 'class="table table-sm"')
             tables.append(table_1nf)
         print(tables)
         print(not_key)
@@ -242,7 +242,7 @@ def thrid_nf():
             return render_template('3_nf.html', tables=tables, p_k=p_k, n_k=n_k, data=[{'name': 'SI'}, {'name': 'NO'}])
         else:
             table = request.form.get('tables')
-            table = table.replace('class="table"', 'class="dataframe"')
+            table = table.replace('class="table table-sm"', 'class="dataframe"')
             i = 0
             all_tables = {}
             while i < len(tables):
@@ -266,7 +266,7 @@ def thrid_nf():
                 if j == 0:
                     all_tables[j] = all_tables[j].drop(columns=attr_partial_pk)
                 all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
-                all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table"')
+                all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
                 print(all_tables[j])
 
@@ -279,7 +279,7 @@ def normalized():
         parcial_dependence = request.form.get('comp_select')
         tables = request.form.get('tables')
         tables = tables.replace("[", '')
-        tables = tables.replace("]", '')
+        tables = tables.replace("]:ok_hand:", '')
         tables = tables.replace('\n', '')
         tables = tables.replace('\\n', '')
         tables = tables.replace("'", '')
@@ -303,7 +303,7 @@ def normalized():
             return render_template('normalized_table.html', tables=tables, p_k=p_k, n_k=n_k)
         else:
             table = request.form.get('tables')
-            table = table.replace('class="table"', 'class="dataframe"')
+            table = table.replace('class="table table-sm"', 'class="dataframe"')
             i = 0
             all_tables = {}
             while i < len(tables):
@@ -327,7 +327,7 @@ def normalized():
                 if j == 0:
                     all_tables[j] = all_tables[j].drop(columns=dependents)
                 all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
-                all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table"')
+                all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
 
             return render_template('normalized_table.html', tables=final_tables, p_k=p_k, n_k=n_k)
