@@ -245,6 +245,7 @@ def thrid_nf():
             for j in all_tables:
                 if j == 0:
                     all_tables[j] = all_tables[j].drop(columns=attr_partial_pk)
+                all_tables[j] = pd.DataFrame.drop_duplicates(all_tables[j])
                 all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
                 all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
@@ -305,6 +306,7 @@ def normalized():
             for j in all_tables:
                 if j == 0:
                     all_tables[j] = all_tables[j].drop(columns=dependents)
+                all_tables[j] = pd.DataFrame.drop_duplicates(all_tables[j])
                 all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
                 all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
