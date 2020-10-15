@@ -59,7 +59,6 @@ def universal_table(filename):
     dataframe = pd.DataFrame.to_html(table, index=False)
     dataframe = dataframe.replace('class="dataframe"', 'class="table table-sm"')
 
-    print(dataframe)
     return render_template('universal_table.html', dataframe=dataframe, attributes=table_attributes, document=filename)
 
 
@@ -67,8 +66,6 @@ def universal_table(filename):
 def first_nf():
     if request.method == 'POST':
         table_pk = request.form.getlist('attribute')
-        print(len(table_pk))
-        print('table_pk : ', table_pk)
         if len(table_pk) == 0:
             return '''
                 <h3> No ha seleccionado una clave primaria </h3>
@@ -86,8 +83,6 @@ def first_nf():
             original_table = request.form.get('original_table')
             document = request.form.get('original_table')
 
-            print(original_table)
-            print(attributes)
             attributes = attributes.replace('[', '')
             attributes = attributes.replace(']', '')
             attributes = attributes.replace("'", '')
@@ -96,11 +91,9 @@ def first_nf():
             not_key = attributes
             for i in table_pk:
                 not_key.remove(i)
-            print(not_key)
 
             data = pd.read_html(original_table, header=0)[0]
             data = pd.DataFrame(data)
-            print(data)
 
             pk_is_valid = any(data.duplicated(subset=table_pk))
             if not pk_is_valid:
@@ -152,15 +145,12 @@ def second_nf():
             sep_val = ';'
 
         not_atomic = request.form.getlist('attribute')
-        print(not_atomic)
-        print(type(not_atomic))
 
         table = request.form.get('table')
         table = table.replace('class="table table-sm"', 'class="dataframe"')
-        print(table)
+
         data = pd.read_html(table, header=0)[0]
         data = pd.DataFrame(data)
-        print(data)
 
         tables = []
 
@@ -168,44 +158,34 @@ def second_nf():
         table_without_not_atomic = table_without_not_atomic.drop(columns=not_atomic)
         table_without_not_atomic = pd.DataFrame.to_html(table_without_not_atomic, index=False)
         table_without_not_atomic = table_without_not_atomic.replace('class="dataframe"', 'class="table table-sm"')
-        tables.append(table_without_not_atomic)
-        print(table_without_not_atomic)
+        #tables.append(table_without_not_atomic)
 
-        data_pk = data[primary_key]
-        print('data_pk : ', data_pk)
+        #data_pk = data[primary_key] # Asigna columnas vacias de la clave primaria
+        data_pk = data[primary_key + attributes] # Asigna columnas vacias de la clave primaria
 
         for i in not_atomic:
             table_1nf = data_pk
             table_1nf[i] = data[i]
-            table_1nf = table_1nf.dropna()
-            print(table_1nf[i], ':', data[i])
+            #table_1nf = table_1nf.dropna()
             length = table_1nf[i].count()
-            print(length)
             j = 0
             while j < length:
                 split_row = table_1nf.iloc[j][i].split(sep_val)
-                print(split_row)
                 if len(split_row) > 1:
                     for k in split_row:
                         row_rp = table_1nf.iloc[j]
                         row_rp[i] = k
-                        print(row_rp[i])
-                        print(table_1nf.iloc[j])
-                        print(type(table_1nf.iloc[j]))
                         table_1nf = table_1nf.append(row_rp, ignore_index=True)
                     table_1nf = table_1nf.drop(table_1nf.index[j])
                 j = j + 1
-            print(table_1nf)
             table_1nf = pd.DataFrame.to_html(table_1nf, index=False)
             table_1nf = table_1nf.replace('class="dataframe"', 'class="table table-sm"')
             tables.append(table_1nf)
-        print(tables)
-        print(not_key)
-        print(not_atomic[0])
+
         attributes_not_key = not_key
         for nt in not_atomic:
             attributes_not_key.remove(nt)
-        print(attributes_not_key)
+
         return render_template('2_nf.html', tables=tables, primary_key=primary_key, attributes_not_key=attributes_not_key,
                                data=[{'name': 'SI'}, {'name': 'NO'}])
     else:
@@ -268,7 +248,6 @@ def thrid_nf():
                 all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
                 all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
-                print(all_tables[j])
 
             return render_template('3_nf.html', tables=final_tables, p_k=p_k, n_k=n_k, data=[{'name': 'SI'}, {'name': 'NO'}])
 
