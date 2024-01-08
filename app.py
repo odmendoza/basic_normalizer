@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7.3
+#!/usr/bin/python3.11.6
 
 # -*- coding: utf-8 -*-
 import os
@@ -12,7 +12,6 @@ ALLOWED_EXTENSIONS = {'xls', 'xlsx'}
 
 # Settings
 app = Flask(__name__)
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -57,7 +56,8 @@ def universal_table(filename):
     table_attributes = table.columns.values
 
     dataframe = pd.DataFrame.to_html(table, index=False)
-    dataframe = dataframe.replace('class="dataframe"', 'class="table table-sm"')
+    dataframe = dataframe.replace(
+        'class="dataframe"', 'class="table table-sm"')
 
     return render_template('universal_table.html', dataframe=dataframe, attributes=table_attributes, document=filename)
 
@@ -111,7 +111,7 @@ def first_nf():
                     function goBack() {
                       window.history.back();
                       }
-                      </script>'''
+                </script>'''
 
 
 @app.route('/2_nf', methods=['GET', 'POST'])
@@ -155,18 +155,22 @@ def second_nf():
         tables = []
 
         table_without_not_atomic = data
-        table_without_not_atomic = table_without_not_atomic.drop(columns=not_atomic)
-        table_without_not_atomic = pd.DataFrame.to_html(table_without_not_atomic, index=False)
-        table_without_not_atomic = table_without_not_atomic.replace('class="dataframe"', 'class="table table-sm"')
-        #tables.append(table_without_not_atomic)
+        table_without_not_atomic = table_without_not_atomic.drop(
+            columns=not_atomic)
+        table_without_not_atomic = pd.DataFrame.to_html(
+            table_without_not_atomic, index=False)
+        table_without_not_atomic = table_without_not_atomic.replace(
+            'class="dataframe"', 'class="table table-sm"')
+        # tables.append(table_without_not_atomic)
 
-        #data_pk = data[primary_key] # Asigna columnas vacias de la clave primaria
-        data_pk = data[primary_key + attributes] # Asigna columnas vacias de la clave primaria
+        # data_pk = data[primary_key] # Asigna columnas vacias de la clave primaria
+        # Asigna columnas vacias de la clave primaria
+        data_pk = data[primary_key + attributes]
 
         for i in not_atomic:
             table_1nf = data_pk
             table_1nf[i] = data[i]
-            #table_1nf = table_1nf.dropna()
+            # table_1nf = table_1nf.dropna()
             length = table_1nf[i].count()
             j = 0
             while j < length:
@@ -179,7 +183,8 @@ def second_nf():
                     table_1nf = table_1nf.drop(table_1nf.index[j])
                 j = j + 1
             table_1nf = pd.DataFrame.to_html(table_1nf, index=False)
-            table_1nf = table_1nf.replace('class="dataframe"', 'class="table table-sm"')
+            table_1nf = table_1nf.replace(
+                'class="dataframe"', 'class="table table-sm"')
             tables.append(table_1nf)
 
         attributes_not_key = not_key
@@ -218,11 +223,12 @@ def thrid_nf():
         n_k = n_k.replace(' ', '')
         n_k = list(n_k.split(','))
 
-        if parcial_dependence=='NO':
+        if parcial_dependence == 'NO':
             return render_template('3_nf.html', tables=tables, p_k=p_k, n_k=n_k, data=[{'name': 'SI'}, {'name': 'NO'}])
         else:
             table = request.form.get('tables')
-            table = table.replace('class="table table-sm"', 'class="dataframe"')
+            table = table.replace(
+                'class="table table-sm"', 'class="dataframe"')
             i = 0
             all_tables = {}
             while i < len(tables):
@@ -246,8 +252,10 @@ def thrid_nf():
                 if j == 0:
                     all_tables[j] = all_tables[j].drop(columns=attr_partial_pk)
                 all_tables[j] = pd.DataFrame.drop_duplicates(all_tables[j])
-                all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
-                all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
+                all_tables[j] = pd.DataFrame.to_html(
+                    all_tables[j], index=False)
+                all_tables[j] = all_tables[j].replace(
+                    'class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
 
             return render_template('3_nf.html', tables=final_tables, p_k=p_k, n_k=n_k, data=[{'name': 'SI'}, {'name': 'NO'}])
@@ -279,11 +287,12 @@ def normalized():
         n_k = n_k.replace(' ', '')
         n_k = list(n_k.split(','))
 
-        if parcial_dependence=='NO':
+        if parcial_dependence == 'NO':
             return render_template('normalized_table.html', tables=tables, p_k=p_k, n_k=n_k)
         else:
             table = request.form.get('tables')
-            table = table.replace('class="table table-sm"', 'class="dataframe"')
+            table = table.replace(
+                'class="table table-sm"', 'class="dataframe"')
             i = 0
             all_tables = {}
             while i < len(tables):
@@ -307,8 +316,10 @@ def normalized():
                 if j == 0:
                     all_tables[j] = all_tables[j].drop(columns=dependents)
                 all_tables[j] = pd.DataFrame.drop_duplicates(all_tables[j])
-                all_tables[j] = pd.DataFrame.to_html(all_tables[j], index=False)
-                all_tables[j] = all_tables[j].replace('class="dataframe"', 'class="table table-sm"')
+                all_tables[j] = pd.DataFrame.to_html(
+                    all_tables[j], index=False)
+                all_tables[j] = all_tables[j].replace(
+                    'class="dataframe"', 'class="table table-sm"')
                 final_tables.append(all_tables[j])
 
             return render_template('normalized_table.html', tables=final_tables, p_k=p_k, n_k=n_k)
